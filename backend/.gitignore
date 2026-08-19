@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local secrets (DB password, JWT secret) ###
+application-local.properties
+.env
