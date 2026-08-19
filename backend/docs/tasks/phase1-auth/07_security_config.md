@@ -43,7 +43,7 @@ public class SecurityConfig {
             .exceptionHandling(ex ->
                 ex.authenticationEntryPoint(restAuthenticationEntryPoint))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -79,7 +79,7 @@ app.cors.allowed-origins=http://localhost:5173
 
 - `csrf().disable()` はJWTによるステートレスAPIでは一般的（Cookieセッションを使わないためCSRFの前提が成立しない）。
 - CORSの許可オリジンはフロントエンドの開発サーバーのポートに合わせて調整する（Vite=5173, CRA=3000など）。
-- `/api/auth/**` のみ未認証アクセスを許可し、それ以外（今後実装するタスクAPI等）はデフォルトで認証必須にしておく。
+- `/api/auth/signup` と `/api/auth/login` のみ未認証アクセスを許可する。**`/api/auth/**` のようなワイルドカードにしないこと**（`/api/auth/me` まで未認証で通ってしまい、Controller内で`principal`がnullのまま扱われて500エラーになる）。それ以外（`/api/auth/me`、今後実装するタスクAPI等）はデフォルトで認証必須にしておく。
 
 ## 受け入れ条件
 

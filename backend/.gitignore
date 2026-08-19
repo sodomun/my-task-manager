@@ -35,3 +35,6 @@ build/
 ### Local secrets (DB password, JWT secret) ###
 application-local.properties
 .env
+
+### Local machine-specific Maven TLS workaround (Avast等のTLS検査対策。他の環境では不要/害になる) ###
+.mvn/jvm.config
