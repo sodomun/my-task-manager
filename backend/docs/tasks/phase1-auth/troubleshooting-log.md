@@ -24,6 +24,16 @@
 
 ---
 
+## 4. （環境固有）`./mvnw test`で新しいプラグイン取得時に`certificate_unknown`エラー
+
+- **症状**：`12_automated_tests`着手時、`maven-surefire-plugin`等の新規プラグイン/依存関係を取得しようとすると`PKIX path building failed`で失敗。ただしPowerShellの`Invoke-WebRequest`では同じURLに正常アクセスできた
+- **原因**：**Avastアンチウイルスの「Web/Mail Shield」機能**がHTTPS通信を検査するため自己署名証明書に差し替えている。Windows自体はこの証明書を信頼しているが、JDKは独自の証明書ストア（cacerts）を持っており、そこにはAvastの証明書が入っていないため検証に失敗していた
+- **修正**（このPC限定の対応。他の開発環境では不要）：
+  1. Avastのルート証明書をWindowsの信頼チェーンから抽出
+  2. JDKの`cacerts`のコピーを`~/.m2/maven-cacerts-with-avast`として作成し、そこにAvast証明書を`keytool -importcert`で追加（`Program Files`配下のJDK本体は書き込み権限がないため直接は変更していない）
+  3. `backend/.mvn/jvm.config`（**gitignore対象**）でMavenにこの信頼ストアを使うよう指定
+- 他の開発者・別PCでは、この対策（`.mvn/jvm.config`）は存在しない状態が正しい。もし同様のエラーが出た場合は、自分の環境のアンチウイルス/プロキシのTLS検査機能を疑うこと
+
 ## 教訓
 
 - コンパイルが通ることと、実行時にクラス/Beanが解決できることは別問題（2番目のバグ）。特にメジャーバージョンが上がったフレームワークでは、意図せず新旧の同名クラスが混在しうる
