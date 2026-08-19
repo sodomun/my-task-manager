@@ -1,0 +1,113 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-08-19T02:00:00.000Z",
+  "__export_source": "insomnia.manual.v1",
+  "resources": [
+    {
+      "_id": "wrk_tasknavi_auth",
+      "_type": "workspace",
+      "name": "TaskNavi - Phase1 Auth",
+      "description": "backend/docs/tasks/phase1-auth の動作確認用",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base_tasknavi",
+      "_type": "environment",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "Base Environment",
+      "data": {
+        "baseUrl": "http://localhost:8080",
+        "email": "test@example.com",
+        "password": "password123",
+        "token": ""
+      },
+      "dataPropertyOrder": {
+        "&": ["baseUrl", "email", "password", "token"]
+      }
+    },
+    {
+      "_id": "req_signup",
+      "_type": "request",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "1. Signup",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/api/auth/signup",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"{{ _.email }}\",\n  \"password\": \"{{ _.password }}\"\n}"
+      },
+      "headers": [{ "name": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "_id": "req_signup_dup",
+      "_type": "request",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "2. Signup (重複メール -> 409想定)",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/api/auth/signup",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"{{ _.email }}\",\n  \"password\": \"{{ _.password }}\"\n}"
+      },
+      "headers": [{ "name": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "_id": "req_signup_invalid",
+      "_type": "request",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "3. Signup (バリデーション違反 -> 400想定)",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/api/auth/signup",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"not-an-email\",\n  \"password\": \"123\"\n}"
+      },
+      "headers": [{ "name": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "4. Login (正常 -> 200 + token)",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/api/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"{{ _.email }}\",\n  \"password\": \"{{ _.password }}\"\n}"
+      },
+      "headers": [{ "name": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "_id": "req_login_wrong",
+      "_type": "request",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "5. Login (パスワード誤り -> 401想定)",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/api/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"{{ _.email }}\",\n  \"password\": \"wrongpassword\"\n}"
+      },
+      "headers": [{ "name": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "_id": "req_me_no_token",
+      "_type": "request",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "6. Me トークンなし (-> 401想定)",
+      "method": "GET",
+      "url": "{{ _.baseUrl }}/api/auth/me",
+      "headers": []
+    },
+    {
+      "_id": "req_me_with_token",
+      "_type": "request",
+      "parentId": "wrk_tasknavi_auth",
+      "name": "7. Me トークンあり (-> 200想定)",
+      "method": "GET",
+      "url": "{{ _.baseUrl }}/api/auth/me",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ _.token }}" }]
+    }
+  ]
+}

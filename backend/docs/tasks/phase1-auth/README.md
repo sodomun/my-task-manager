@@ -68,3 +68,4 @@ controller/       AuthController
 | 11 | [11_manual_verification.md](./11_manual_verification.md) | 動作確認手順（curl） |
 | 12 | [12_automated_tests.md](./12_automated_tests.md) | 自動テスト（単体・結合） |
 | 13 | [13_frontend_stub_note.md](./13_frontend_stub_note.md) | フロント側スコープメモ（Phase1完了条件用） |
+| - | [troubleshooting-log.md](./troubleshooting-log.md) | 初回起動時に遭遇したバグと修正の記録 |

@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(restAuthenticationEntryPoint))
                 .authorizeHttpRequests(
                         auth ->
-                                auth.requestMatchers("/api/auth/**")
+                                auth.requestMatchers("/api/auth/signup", "/api/auth/login")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
