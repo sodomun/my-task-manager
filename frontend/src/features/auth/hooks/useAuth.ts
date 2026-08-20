@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { fetchMe, login as loginRequest, signup as signupRequest } from '../api/authClient'
+import { fetchMe, login as loginRequest, signup as signupRequest } from '../services/authService'
 
 const TOKEN_STORAGE_KEY = 'tasknavi.token'
 
@@ -34,7 +34,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [isRestoring, setIsRestoring] = useState(true)
 
-  // 起動時（リロード時）、保存済みトークンがまだ有効か /me で確認してログイン状態を復元する
   useEffect(() => {
     if (!token) {
       setIsRestoring(false)
@@ -43,7 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchMe(token)
       .then((me) => setUser({ email: me.email }))
       .catch(() => {
-        // トークンが無効/期限切れならログアウト状態として扱う
         localStorage.removeItem(TOKEN_STORAGE_KEY)
         setToken(null)
         setUser(null)
@@ -66,7 +64,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const logout = useCallback(() => {
-    // JWTはステートレスなのでサーバーへの通知は不要。ローカルのトークンを破棄するだけでよい
     localStorage.removeItem(TOKEN_STORAGE_KEY)
     setToken(null)
     setUser(null)

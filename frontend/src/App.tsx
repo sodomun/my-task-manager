@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes, useLocation, type Location } from 'react-router-dom'
 import './App.css'
 import { Modal } from './components/Modal'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './features/auth/hooks/useAuth'
 import { ExampleDetailPage } from './pages/ExampleDetailPage'
 import { LoginPage } from './pages/LoginPage'
 import { SignupPage } from './pages/SignupPage'
-import { TodayTasksPlaceholder } from './pages/TodayTasksPlaceholder'
-import { ProtectedRoute } from './routes/ProtectedRoute'
+import { TodayTasksPage } from './pages/TodayTasksPage'
+import { ProtectedRoute } from './features/auth/components/ProtectedRoute'
 
 interface ModalRoutingState {
   backgroundLocation?: Location
@@ -28,7 +28,7 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <TodayTasksPlaceholder />
+              <TodayTasksPage />
             </ProtectedRoute>
           }
         />
