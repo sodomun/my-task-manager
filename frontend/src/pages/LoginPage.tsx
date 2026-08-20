@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ApiError } from '../api/authClient'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../features/auth/hooks/useAuth'
+import { ApiError } from '../services/httpClient'
 
 export function LoginPage() {
   const { login } = useAuth()

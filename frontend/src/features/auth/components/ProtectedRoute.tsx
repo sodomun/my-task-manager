@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
-/** 未ログインならログイン画面へリダイレクトする。Phase1完了条件（ログインしないと入れない）の要。 */
+/** 未ログインならログイン画面へリダイレクトする。 */
 export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { token, isRestoring } = useAuth()
 
