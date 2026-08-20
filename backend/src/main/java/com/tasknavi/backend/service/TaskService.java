@@ -1,9 +1,11 @@
 package com.tasknavi.backend.service;
 
 import com.tasknavi.backend.dto.request.CreateTaskRequest;
+import com.tasknavi.backend.dto.request.UpdateTaskRequest;
 import com.tasknavi.backend.dto.response.TaskResponse;
 import com.tasknavi.backend.entity.Task;
 import com.tasknavi.backend.entity.User;
+import com.tasknavi.backend.exception.TaskNotFoundException;
 import com.tasknavi.backend.repository.TaskRepository;
 import com.tasknavi.backend.repository.UserRepository;
 import java.util.List;
@@ -41,6 +43,28 @@ public class TaskService {
         return taskRepository.findByUserIdOrderBySortOrderAsc(userId).stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    @Transactional
+    public TaskResponse update(Long userId, Long taskId, UpdateTaskRequest request) {
+        Task task = taskRepository.findByIdAndUserId(taskId, userId)
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
+
+        task.setType(request.type());
+        task.setTitle(request.title());
+        task.setTimeSlot(request.timeSlot());
+        task.setDueDate(request.dueDate());
+        task.setDueTimeSlot(request.dueTimeSlot());
+        task.setPriority(request.priority());
+
+        return toResponse(task);
+    }
+
+    @Transactional
+    public void delete(Long userId, Long taskId) {
+        Task task = taskRepository.findByIdAndUserId(taskId, userId)
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
+        taskRepository.delete(task);
     }
 
     private TaskResponse toResponse(Task task) {

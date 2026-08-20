@@ -9,7 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * Spring Securityの認証コンテキストに載せる、{@link User}エンティティのラッパー。
  *
- * <p>Controller/Serviceからユーザーidを取り出せるよう、Spring標準の{@code User}クラスではなく独自実装にしている。
+ * UserDetails を実装（implements）して Spring Security 用にラッピングする
+ * 
+ * <p>
+ * Controller/Serviceからユーザーidを取り出せるよう、Spring標準の{@code User}クラスではなく独自実装にしている。
  */
 public class UserPrincipal implements UserDetails {
 
@@ -23,6 +26,7 @@ public class UserPrincipal implements UserDetails {
         this.passwordHash = passwordHash;
     }
 
+    // from メソッド
     public static UserPrincipal from(User user) {
         return new UserPrincipal(user.getId(), user.getEmail(), user.getPasswordHash());
     }
