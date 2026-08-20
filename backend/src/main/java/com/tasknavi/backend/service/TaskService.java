@@ -1,6 +1,7 @@
 package com.tasknavi.backend.service;
 
 import com.tasknavi.backend.dto.request.CreateTaskRequest;
+import com.tasknavi.backend.dto.request.ReorderTasksRequest;
 import com.tasknavi.backend.dto.request.UpdateTaskRequest;
 import com.tasknavi.backend.dto.response.TaskResponse;
 import com.tasknavi.backend.entity.Task;
@@ -9,6 +10,8 @@ import com.tasknavi.backend.exception.TaskNotFoundException;
 import com.tasknavi.backend.repository.TaskRepository;
 import com.tasknavi.backend.repository.UserRepository;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +61,23 @@ public class TaskService {
         task.setPriority(request.priority());
 
         return toResponse(task);
+    }
+
+    @Transactional
+    public void reorder(Long userId, ReorderTasksRequest request) {
+        List<Task> tasks = taskRepository.findByUserIdOrderBySortOrderAsc(userId);
+        Map<Long, Task> taskById = tasks.stream()
+                .collect(Collectors.toMap(Task::getId, t -> t));
+
+        List<Long> orderedIds = request.orderedTaskIds();
+
+        if (orderedIds.size() != tasks.size() || !taskById.keySet().containsAll(orderedIds)) {
+            throw new IllegalArgumentException("並び替え対象のタスクIDが不正です");
+        }
+
+        for (int i = 0; i < orderedIds.size(); i++) {
+            taskById.get(orderedIds.get(i)).setSortOrder(i);
+        }
     }
 
     @Transactional

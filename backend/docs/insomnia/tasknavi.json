@@ -1,0 +1,150 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-08-20",
+  "__export_source": "tasknavi",
+  "resources": [
+    {
+      "_id": "wrk_tasknavi",
+      "_type": "workspace",
+      "name": "tasknavi",
+      "description": ""
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_tasknavi",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8080",
+        "token": ""
+      }
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_tasknavi",
+      "name": "Auth"
+    },
+    {
+      "_id": "req_signup",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "サインアップ",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/signup",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+      }
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "ログイン",
+      "method": "POST",
+      "url": "{{ base_url }}/api/auth/login",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+      }
+    },
+    {
+      "_id": "req_me",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "自分の情報取得",
+      "method": "GET",
+      "url": "{{ base_url }}/api/auth/me",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "fld_tasks",
+      "_type": "request_group",
+      "parentId": "wrk_tasknavi",
+      "name": "Tasks"
+    },
+    {
+      "_id": "req_task_create",
+      "_type": "request",
+      "parentId": "fld_tasks",
+      "name": "タスク作成",
+      "method": "POST",
+      "url": "{{ base_url }}/api/tasks",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"type\": \"仕事\",\n  \"title\": \"資料作成\",\n  \"timeSlot\": \"MORNING\",\n  \"dueDate\": \"2026-08-20\",\n  \"dueTimeSlot\": \"EVENING\",\n  \"priority\": \"HIGH\"\n}"
+      }
+    },
+    {
+      "_id": "req_task_list",
+      "_type": "request",
+      "parentId": "fld_tasks",
+      "name": "タスク一覧取得",
+      "method": "GET",
+      "url": "{{ base_url }}/api/tasks",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_task_update",
+      "_type": "request",
+      "parentId": "fld_tasks",
+      "name": "タスク更新",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/tasks/1",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"type\": \"仕事\",\n  \"title\": \"資料作成（修正）\",\n  \"timeSlot\": \"AFTERNOON\",\n  \"dueDate\": \"2026-08-20\",\n  \"dueTimeSlot\": null,\n  \"priority\": \"MEDIUM\"\n}"
+      }
+    },
+    {
+      "_id": "req_task_delete",
+      "_type": "request",
+      "parentId": "fld_tasks",
+      "name": "タスク削除",
+      "method": "DELETE",
+      "url": "{{ base_url }}/api/tasks/1",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_task_reorder",
+      "_type": "request",
+      "parentId": "fld_tasks",
+      "name": "タスク並び替え",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/tasks/reorder",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{ token }}" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"orderedTaskIds\": [3, 1, 2]\n}"
+      }
+    }
+  ]
+}

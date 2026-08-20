@@ -1,6 +1,7 @@
 package com.tasknavi.backend.controller;
 
 import com.tasknavi.backend.dto.request.CreateTaskRequest;
+import com.tasknavi.backend.dto.request.ReorderTasksRequest;
 import com.tasknavi.backend.dto.request.UpdateTaskRequest;
 import com.tasknavi.backend.dto.response.TaskResponse;
 import com.tasknavi.backend.security.UserPrincipal;
@@ -54,6 +55,14 @@ public class TaskController {
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long taskId) {
         taskService.delete(principal.getId(), taskId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/reorder")
+    public ResponseEntity<Void> reorder(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody ReorderTasksRequest request) {
+        taskService.reorder(principal.getId(), request);
         return ResponseEntity.noContent().build();
     }
 }
