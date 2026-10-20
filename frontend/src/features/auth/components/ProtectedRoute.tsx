@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 /** 未ログインならログイン画面へリダイレクトする。 */
-export function ProtectedRoute({ children }: { children: ReactNode }) {
+export function ProtectedRoute({ children }: { children: ReactNode }) { // React は1つのオブジェクトでしか Props として受け取らない
   const { token, isRestoring } = useAuth()
 
   if (isRestoring) {

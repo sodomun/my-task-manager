@@ -26,7 +26,7 @@ public class TaskService {
     @Transactional
     public TaskResponse create(Long userId, CreateTaskRequest request) {
         User user = userRepository.getReferenceById(userId);
-        int nextSortOrder = taskRepository.findMaxSortOrderByUserId(userId) + 1;
+        int nextSortOrder = taskRepository.findMaxSortOrderByUserId(userId) + 1; // 「今日のタスク」で配置する際の添え字（既存の最大添え字の次）
 
         Task task = new Task();
         task.setUser(user);

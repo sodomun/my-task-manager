@@ -33,7 +33,7 @@ export async function handleResponse<T>(response: Response): Promise<T> {
       body,
     )
   }
-  return response.json() as Promise<T>
+  return response.json() as Promise<T> // 非同期処理がすべて終えたら返す. T（Type）は後から型を指定できるように仮定義した型.
 }
 
 export async function handleVoidResponse(response: Response): Promise<void> {
